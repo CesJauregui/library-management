@@ -113,6 +113,19 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(NoAvailableCopiesException.class)
+    public ResponseEntity<ErrorResponse> handleNoAvailableCopies(
+            NoAvailableCopiesException ex
+    ) {
+        log.error("No available copies: {}", ex.getMessage());
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(error,HttpStatus.BAD_REQUEST);
+    }
+
     // Clase interna para respuesta de errores
     record ErrorResponse(int status, String message, LocalDateTime timestamp) {}
 }
